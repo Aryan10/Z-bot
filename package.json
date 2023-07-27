@@ -1,0 +1,27 @@
+{
+  "name": "Frontier",
+  "version": "1.0.3",
+  "description": "pre-release",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "eris": "^0.16.2",
+    "discord.js": "^11.4.2",
+    "eris-components": "^1.0.5"
+  },
+  "engines": {
+    "node": "16.x"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/glitch-hello-node"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "express"
+  ]
+}
