@@ -19,8 +19,16 @@ Made with [Discord.js](https://github.com/discordjs/discord.js)
 
 [Join the official Discord Server for support](https://discord.gg/PMXCpFC)
 
-[Invite the bot to your server](https://discordapp.com/oauth2/authorize?&client_id=405365319901904899&scope=bot&permissions=8)
+[Invite the bot to your server](https://discordapp.com/oauth2/authorize?&client_id=405365319901904899&scope=bot&permissions=26932331150400)
 
 [![Avatar](https://cdn.discordapp.com/avatars/405365319901904899/c961f321de623baaf7b5e89fffe427a8.png?size=2048)]()
 
 # Features
+
+• Get data on any pokemon, moves, items, abilities or types.
+
+• Get learnable moves through various means and weakness of any Pokemon.
+
+• Open Source, hosted on glitch.com, feel free to host it yourself on glitch, all you need to do is update botConfig.js
+
+[![Discord Bots](https://discordbots.org/api/widget/405365319901904899.svg)](https://discordbots.org/bot/405365319901904899)
