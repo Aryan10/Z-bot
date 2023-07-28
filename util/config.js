@@ -1,47 +1,50 @@
 const pkg = require('/app/package.json');
-
-let prefix = "!";
-let version = "Alpha " + pkg.version;
+const bot = require('/app/botConfig.js');
+let version = bot.version + " " + pkg.version;
 
 // status
-/* 
-  status: "online", "idle", "dnd", "invisible"
-  name: 
-  type: 0: "playing", 1: "streaming", 2: "listening", 3: "watching", 5: "competing in"
-  url: 
-*/
-let url = 'https://glitch.com/edit/#!/discord-frontier';
+let url = 'https://glitch.com/edit/#!/' + process.env.PROJECT_DOMAIN;
 let devStatus = {
   status: "dnd", type: 5, url,
-  name: version + ' | ' + prefix + 'help',
-}
-let status = {
+  name: version + ' | ' + bot.prefix + 'help',
+},
+    publicStatus = {
   status: "online", type: 3,
-  name: '/help | ' + prefix + 'help'
+  name: '/help | ' + bot.prefix + 'help'
 }
+let status = bot.indev === true ? devStatus : publicStatus;
 
 // inviteURL
-let client_id = "405365319901904899",
-    permissions = "26932331150400";
+let permissionRequested = "26932331150400";
 
 module.exports = {
-  username: "Z-bot",
-  maxShards: 2,
-  token: process.env.DISCORD_TOKEN,
+  username: bot.username,
+  maxShards: bot.maxShards,
+  token: bot.token,
   
-  color: 15277667,
-  prefix: prefix,
+  color: bot.color,
+  prefix: bot.prefix,
   version: version,
   status: status,
   
-  guildInviteURL: 'https://discord.gg/42csE92',
-  inviteURL: `https://discord.com/api/oauth2/authorize?client_id=${client_id}&permissions=${permissions}&scope=bot`,
+  guildInviteURL: 'https://discord.gg/' + bot.guildInvite,
+  inviteURL: (client) => `https://discord.com/api/oauth2/authorize?client_id=${client.application.id}&permissions=${permissionRequested}&scope=bot`,
   
-  botOwners: [
-    "273865811133857792", // aryan.10
-    "280749589974482945" // ryan3770
-  ],
-  botChannels: [
-    "643679158789996550"
-  ],
+  botOwners: bot.botOwners
 }
+
+
+
+// // status
+
+/* 
+
+  status: "online", "idle", "dnd", "invisible"
+
+  name: 
+
+  type: 0: "playing", 1: "streaming", 2: "listening", 3: "watching", 5: "competing in"
+
+  url: 
+
+*/

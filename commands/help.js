@@ -39,7 +39,7 @@ exports.run = (client, message) => {
     let slashEnabled = cmd.slash && !cmd.slash.disabled;
     if (cmd.conf.ownerOnly) desc += "\n**Bot Owner Only**";
     const cmdHelp = new client.embed()
-      .setColor(client.config.color)
+      .setColor(3447003)
       .setTitle(prefix + cmd.help.name)
       .setDescription(desc);
     if (cmd.conf.aliases && cmd.conf.aliases.length) cmdHelp.addField('Aliases', cmd.conf.aliases.join(', '));
@@ -68,12 +68,12 @@ exports.startInteraction = (client, message, menu) => {
   let owners = [];
   client.config.botOwners.forEach(o => owners.push('<@' + o + '>'));
 	const aboutEmbed = new client.embed()
-	  .setColor(client.config.color)
+	  .setColor(3447003)
 	  .setAuthor(client.user.username + '#' + client.user.discriminator, client.user.avatarURL)
     .setThumbnail(
       client.user.avatarURL)
     .setDescription(
-      `${client.user.mention} is a WIP discord bot designed for Pokemon Trainers for assistance with pokemon-related information, pokemon battling and their pokemon journey.\n> ${client.guilds.size} Servers\n> Bot Owners: ${owners.join(" ")}\n[Add ${client.user.username} to your own server](${client.config.inviteURL})\n> Running **Frontier ${client.config.version}**\n> Made by <@273865811133857792>\n[Join ${client.user.username} official server](${client.config.guildInviteURL})`)
+      `${client.user.mention} is a WIP discord bot designed for Pokemon Trainers for assistance with pokemon-related information, pokemon battling and their pokemon journey.\n> ${client.guilds.size} Servers\n> Bot Owners: ${owners.join(" ")}\n[Add ${client.user.username} to your own server](${client.config.inviteURL(client)})\n> Running **Frontier ${client.config.version}**\n> Made by <@273865811133857792>\n[Join ${client.user.username} official server](${client.config.guildInviteURL})`)
 	  .addField('Commands', '> **Select a module to view a list of commands.**');
   
   message.reply({embeds: [aboutEmbed]}, menu);
@@ -91,7 +91,7 @@ exports.continueInteraction = (client, interaction) => {
   let isOwner = client.config.botOwners.includes(author_id);
   
   const mdlsEmbed = new client.embed()
-    .setColor(client.config.color)
+    .setColor(3447003)
     .setAuthor(client.user.username + '#' + client.user.discriminator, client.user.avatarURL)
     .setTitle(data.name + ' Commands')
     .setDescription('> Command Usage:\n> `' + prefix + "command <required> [optional]`\nType `" + prefix + 'help <command name>` for more info on a specific command.')

@@ -290,7 +290,7 @@ const learnables = (id, learnset, eventData) => {
 const makeEmbed = (client, learnarray, dex, id) => {
   if (!learnarray) learnarray = [];
   let bool = (id[1] == "L");
-  let description = learnarray.length ? '```' + (bool ? "Lv    Move\n\n" : "\n") + learnarray.join('\n') + '```' : methods[id[1]].error(id[0]);
+  let description = (learnarray.length) ? '```' + (bool ? "Lv    Move\n\n" : "\n") + learnarray.join('\n') + '```' : methods[id[1]].error(id[0]);
   description = description.replace('Generation 8', 'Pokemon Sword/Shield');
   if (id[1] == "S" && learnarray.length) description = learnarray.join("\n\n");
   let spr = sprites(dex);

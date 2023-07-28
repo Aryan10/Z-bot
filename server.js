@@ -1,6 +1,11 @@
-require("/app/util/host.js");
+const app = require('express')();
+app.get("/", (request, response) => {
+  console.log(Date.now() + " Ping Received");
+  response.sendStatus(200);
+});
+app.listen(process.env.PORT);
 
-const ping = require('/app/util/ping.js');
+const log = require('/app/util/log.js');
 const config = require("/app/util/config.js");
 const fs = require("fs");
 const Client = require("eris");
@@ -91,7 +96,7 @@ client.on("messageCreate", (message) => {
   }
   // command handler
   if (!message.content.startsWith(config.prefix)) return;
-  ping(message);
+  log(client, message);
   
   let command = message.content
     .slice(config.prefix.length)
@@ -136,7 +141,8 @@ client.on('slashCommandInteract', (interaction) => {
       interaction, components || null, content);
   }
   
-  ping();
+  
+  log(client, interaction);
   let args = [];
   let { options } = interaction.data;
   if (options) {
@@ -163,7 +169,7 @@ client.on('slashCommandInteract', (interaction) => {
 
 // on interaction
 client.on('clickButton', (interaction) => {
-  ping();
+  log(client, interaction);
   try {
     const res = require('/app/interactions/clickButton/' + interaction.data.custom_id.split(' ')[0] + '.js');
     res(client, interaction);
@@ -176,7 +182,7 @@ client.on('clickButton', (interaction) => {
 });
 
 client.on('submitMenu', (interaction) => {
-  ping();
+  log(client, interaction);
   try {
     const res = require('/app/interactions/submitMenu/' + interaction.data.custom_id.split(' ')[0] + '.js');
     res(client, interaction);
