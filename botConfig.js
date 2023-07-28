@@ -1,7 +1,8 @@
+/*
 module.exports = {
   username: "Frontier",
   maxShards: 1,
-  token: process.env.DISCORD_TOKEN,
+  token: process.env.INDEV_TOKEN,
   
   prefix: '%',
   color: 3447003,
@@ -14,8 +15,8 @@ module.exports = {
     "273865811133857792", // aryan.10
   ],
 }
+*/
 
-/* 
 module.exports = {
   username: "Z-Bot",
   maxShards: 2,
@@ -34,4 +35,3 @@ module.exports = {
     "315474735641264129", // avexion
   ],
 }
-*/
