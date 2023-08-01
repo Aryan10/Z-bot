@@ -50,7 +50,7 @@ const msgError = (e) => "Oops. An error occured.\n```ERROR: " + e.message + "```
 client.on("ready", async () => {
   console.log(client.user.username + " Ready!" + " " + config.version);
   let { status } = config;
-  status.status = status.status
+  status.name = status.name
     .replace('%servers%', client.guilds.size);
   await client.editStatus(status.status, status);
   require('/app/util/onRestart.js')(client);

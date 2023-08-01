@@ -22,10 +22,7 @@ module.exports = {
   prefix: '+',
   color: 15277667,
   
-  indev: false,
-  version: "Alpha",
-  
-  guildInvite: '42csE92', // #ProjectZ 
+  guildInvite: '42csE92', // #ProjectZ Official 
   botOwners: [
     "273865811133857792", // aryan.10
     "280749589974482945", // ryan3770

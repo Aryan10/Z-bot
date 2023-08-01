@@ -10,7 +10,7 @@ let devStatus = {
 },
     publicStatus = {
   status: "online", type: 3,
-  name: '/help | ' + bot.prefix + 'help + | %servers% servers'
+  name: '/help | ' + bot.prefix + 'help | %servers% servers'
 }
 let status = bot.indev === true ? devStatus : publicStatus;
 
