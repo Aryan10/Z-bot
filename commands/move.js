@@ -1,7 +1,10 @@
 const MovesText = require('/app/data/text/moves.js');
 const MovesData = require('/app/data/moves.js').Moves;
 const Items = require('/app/data/text/items.js');
-const typeIMG = require('/app/util/spriteLoader').type;
+
+const typeIMG = require('/app/util/dex/spriteLoader').type;
+const embedColours = require('/app/util/embedColors.js').typeColors;
+
 var numObj = {};
 Object.keys(MovesData).forEach(name => {
   var { num } = MovesData[name];
@@ -23,27 +26,6 @@ const targetTypes = {
   all: "Affects all pokemon on field",
   allySide: "Affects all allies on field",
   foeSide: "Affect all foes on field",
-}
-const embedColours = {
-    Fire: 16724530,
-    Water: 2456831,
-    Ice: 2456831,
-    Flying: 2456831,
-    Dragon: 2456831,
-    Electric: 16773977,
-    Grass: 4128590,
-    Bug: 4128590,
-    Dark: 3289650,
-    Rock: 10702874,
-    Ground: 10702874,
-    Fighting: 10702874,
-    Poison: 10894824,
-    Ghost: 9868950,
-    Steel: 9868950,
-    Normal: 14803425,
-    'undefined': 14803425,
-    Psychic: 16737701,
-    Fairy: 16737701
 }
 
 exports.slash = {
@@ -143,13 +125,13 @@ exports.conf = {
   disabled: false,
   ownerOnly: false,
   guildOnly: false,
-  aliases: [],
+  aliases: ['moves'],
 }
 
 exports.help = {
   name: "move",
   shortDesc: "Displays move information.",
-  desc: "Displays various information about the specified move such as Type, Base Power, Effects etc.",
-  usage: "move <move name>",
+  desc: "Displays various information about the specified move such as Type, Base Power, Effects etc. Accepts move id number argument.",
+  usage: ["move <move name>"],
   example: ["move thunder "],
 }

@@ -1,27 +1,9 @@
 const typeMatchups = require("../data/typechart.js");
-const typeIMG = require('/app/util/spriteLoader').type;
 
-const embedColours = {
-    Fire: 16724530,
-    Water: 2456831,
-    Ice: 2456831,
-    Flying: 2456831,
-    Dragon: 2456831,
-    Electric: 16773977,
-    Grass: 4128590,
-    Bug: 4128590,
-    Dark: 3289650,
-    Rock: 10702874,
-    Ground: 10702874,
-    Fighting: 10702874,
-    Poison: 10894824,
-    Ghost: 9868950,
-    Steel: 9868950,
-    Normal: 14803425,
-    'undefined': 14803425,
-    Psychic: 16737701,
-    Fairy: 16737701
-}
+const sprites = require('/app/util/dex/spriteLoader.js');
+const { pokeParser } = require('/app/commands/pokedex.js');
+const embedColours = require('/app/util/embedColors.js').typeColors;
+
 const capFL = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
 exports.slash = {
@@ -30,13 +12,22 @@ exports.slash = {
     { 
       type: 3, 
       required: true,
-      name: "types", 
-      description: "Specify pokemon types."
+      name: "argument", 
+      description: "Specify pokemon types or species name."
     }
   ],
 }
 
 exports.run = (client, message) => {
+  if (!message.args.length) {
+    const chartEmbed = new client.embed()
+      .setTitle('Pokemon Type Chart')
+      .setImage('https://cdn.glitch.global/8e812b32-a686-4403-9179-5932b89c1620/Pokemon_Type_Chart.svg.png?v=1690876464462')
+      .setColor(client.config.color)
+      .setFooter('Type ' + client.config.prefix + this.help.usage[0] + ' to get effectiveness a specific type combination.');
+    return message.reply({embed: chartEmbed});
+  }
+  
   let def = {
     vulnCheck: false,
     normalCheck: false,
@@ -86,6 +77,11 @@ exports.run = (client, message) => {
   let args = message.args.join(" ").toLowerCase();
   var displayTypes = [];
   
+  // parse pokemon
+  let dex = pokeParser(message);
+  if (dex) args = dex.types.join(' ').toLowerCase();
+  
+  // parse types
   for (var z = 0; z < args.split(" ").length; z++) {
     var argsSplit = args.split(" ")[z];
     if (Object.keys(typeMatchups).map((c) => c.toLowerCase()).indexOf(argsSplit.toLowerCase()) != -1) {
@@ -339,7 +335,7 @@ exports.run = (client, message) => {
   if (!displayTypes[0]) return message.reply("> Invalid types specified.");
   let types = [];
   displayTypes.forEach(t => types.push(capFL(t)));
-  let imgs = typeIMG(types[0]);
+  let imgs = sprites.type(types[0]);
   const embed = new client.embed()
     .setColor(embedColours[types[0]])
     .setTitle(types.join(" / "))
@@ -354,6 +350,11 @@ exports.run = (client, message) => {
     });
     if (immunities[0]) embed.setFooter('Immune to: ' + immunities.join(', '))
   }
+  if (dex) {
+    let pokespr = sprites.pokemon(dex);
+    embed.setAuthor(dex.name, pokespr.icon);
+    if (types.length > 1) embed.setThumbnail(pokespr.dex);
+  }
 
   message.reply({embed});
 };
@@ -363,15 +364,15 @@ exports.conf = {
   disabled: false,
   ownerOnly: false,
   guildOnly: false,
-  aliases: ['weak'],
+  aliases: ['weak', 'types'],
 }
 
 exports.help = {
   name: "type",
-  shortDesc: "Display type(s) effectiveness.",
-  desc: "Displays combined type effectiveness chart of all the specified type(s).",
-  usage: "type <type1> [type2] ...",
-  example: ['type rock', 'type fire fighting'],
+  shortDesc: "Display type(s) effectiveness. Accepts pokemon name as argument.",
+  desc: "Displays combined type effectiveness chart of all the specified type(s) or the types of the specified pokemon. Sends full type chart image if no argument is specified.",
+  usage: ["type [type1] [type2] ...", "type [pokemon name]"],
+  example: ['type rock', 'type fire fighting', 'type charizard'],
 }
 
 const otherSources  = [

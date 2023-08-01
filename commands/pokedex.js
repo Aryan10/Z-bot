@@ -2,39 +2,43 @@ const termify = (name) => {
   let term = name.toLowerCase().replace(/-/g, '').replace(/ /g, '').replace(/'/g, '').replace(/’/g, '').replace('.', '');
   return term;
 }
-   
-const embedColours = {
-    Red: 16724530,
-    Blue: 2456831,
-    Yellow: 16773977,
-    Green: 4128590,
-    Black: 3289650,
-    Brown: 10702874,
-    Purple: 10894824,
-    Gray: 9868950,
-    White: 14803425,
-    Pink: 16737701
-}
 
 const pokedex = require('/app/data/pokedex.js');
-const evotext = require('/app/util/evolutionMethods.js');
-const spriteLoader = require('/app/util/spriteLoader.js').pokemon;
+const evotext = require('/app/util/dex/evolutionMethods.js');
+const pokemonList = Object.keys(pokedex);
+
+const spriteLoader = require('/app/util/dex/spriteLoader.js').pokemon;
+const embedColours = require('/app/util/embedColors.js').rawColors;
+
+const Matcher = require('did-you-mean');
+let match = new Matcher(pokemonList.join(' '));
+
 var numObj = {};
-Object.keys(pokedex).forEach(name => {
+pokemonList.forEach(name => {
   var { num } = pokedex[name];
   if (!numObj[num]) numObj[num] = name;
 });
 
-exports.pokeParser = (message, args, numberToPoke) => {
+exports.pokeParser = (message, args, numberArray, randomArgument) => {
+  if (!args) args = message.args;
+  if (!args) args = [];
   if (!args[0]) args[0] = '';
   if (!args[1]) args[1] = '';
   if (!args[2]) args[2] = '';
   
-  var data;
+  var data, isRand;
+  if (randomArgument) {
+    let term = args.join('').toLowerCase();
+    if (term == 'r' || term.startsWith('rand')) {
+      isRand = true;
+      let randPoke = Math.floor(Math.random()*1010) + 1;
+      args = [String(randPoke), "", ""];
+    }
+  }
   
-  if (numberToPoke) {
+  if (numberArray) {
     let num = args.join('');
-    let name = numberToPoke[num];
+    let name = numberArray[num];
     if (name) data = pokedex[name];
   }
   
@@ -58,6 +62,7 @@ exports.pokeParser = (message, args, numberToPoke) => {
   if (!data) data = pokedex[args[1] + args[2] + args[0]]; // galarian mr. mime
   if (!data) data = pokedex[args[1] + args[0]]; // mega venusaur
   if (!data && message.args) data = pokedex[termify(message.args[0])];
+  if (isRand) data.fromRandomArgument = true;
   return data;
 }
 
@@ -75,18 +80,20 @@ exports.slash = {
 
 exports.run = (client, message, caller_id) => {
   var { args } = message;
-  console.log(caller_id);
   if (caller_id) {
     let embed = message.message.embeds[0];
     var number = Number(embed.author.name.slice(1).split(' ')[0]);
     if (caller_id == "prev") args = [String(number - 1)];
     if (caller_id == "next") args = [String(number + 1)];
+    if (caller_id == "rand") args = ["rand"];
   }
   
-  let data = this.pokeParser(message, args, numObj);
+  let data = this.pokeParser(message, args, numObj, true);
   
   let error_content = "> No Pokemon found.";
   if (!data || data.isNonstandard === "CAP") {
+    let dym = match.get(message.args.join(" "));
+    if (dym) error_content += "\n> Did you mean `" + dym + "`?";
     if (message.reply) return message.reply(error_content);
     else return client.replyInteraction(message, null, {content: error_content, flags: 64});
   }
@@ -213,9 +220,14 @@ exports.run = (client, message, caller_id) => {
     .setLabel('Next')
     .setEmoji('▶️')
     .setID('pokedexModule pokedex next');
+  const buttonRand = new client.component.Button()
+    .setStyle('primary')
+    .setLabel('Random')
+    .setEmoji('🎲')
+    .setID('pokedexModule pokedex rand');
   const buttonRow = new client.component.ActionRow()
-    .addComponents([buttonPrev, buttonNext]);
-  
+    .setComponents([buttonPrev, buttonNext]);
+  if (data.fromRandomArgument) buttonRow.addComponent(buttonRand);
   const pokeEmbed = new client.embed()
     .setAuthor('#' + data.num, spr.icon)
     .setTitle(data.name)
@@ -251,7 +263,7 @@ exports.conf = {
 exports.help = {
   name: "pokedex",
   shortDesc: "Displays pokemon information.",
-  desc: "Displays various pokedex information about the specified pokemon forme or pokemon national dex number, such as image, base stats, evolutionary line etc.",
-  usage: "pokedex <pokemon name>",
+  desc: "Displays various pokedex information about the specified pokemon forme or pokemon national dex number, such as image, base stats, evolutionary line etc. Corrects wrong pokemon name. Specify argument `random` to get random pokemon instead.",
+  usage: ["pokedex <pokemon name>", "pokedex <pokemon id>", "pokedex random"],
   example: ["pokedex pikachu", "pokedex alolan raichu", "pokedex mega charizard x", "pokedex 25"],
 }

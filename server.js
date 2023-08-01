@@ -1,6 +1,5 @@
 const app = require('express')();
 app.get("/", (request, response) => {
-  console.log(Date.now() + " Ping Received");
   response.sendStatus(200);
 });
 app.listen(process.env.PORT);
@@ -49,8 +48,11 @@ const msgError = (e) => "Oops. An error occured.\n```ERROR: " + e.message + "```
 
 // on ready
 client.on("ready", async () => {
-  console.log("Ready!");
-  await client.editStatus(config.status.status, config.status);
+  console.log(client.user.username + " Ready!" + " " + config.version);
+  let { status } = config;
+  status.status = status.status
+    .replace('%servers%', client.guilds.size);
+  await client.editStatus(status.status, status);
   require('/app/util/onRestart.js')(client);
   
   if (client.user.username !== config.username) {
@@ -63,15 +65,6 @@ client.on("ready", async () => {
   client.commands.forEach(cmd => {
     if (cmd.slash && !cmd.slash.disabled) client.createCommand({
       name: cmd.help.name,
-      description: cmd.help.shortDesc,
-      options: cmd.slash.options,
-      type: 1
-    });
-  });
-  client.aliases.forEach(name => {
-    let cmd = client.commands.get(name);
-    if (cmd.slash && !cmd.slash.disabled) client.createCommand({
-      name: name,
       description: cmd.help.shortDesc,
       options: cmd.slash.options,
       type: 1

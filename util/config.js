@@ -1,6 +1,6 @@
 const pkg = require('/app/package.json');
 const bot = require('/app/botConfig.js');
-let version = bot.version + " " + pkg.version;
+let version = pkg.title + " " + pkg.version;
 
 // status
 let url = 'https://glitch.com/edit/#!/' + process.env.PROJECT_DOMAIN;
@@ -10,7 +10,7 @@ let devStatus = {
 },
     publicStatus = {
   status: "online", type: 3,
-  name: '/help | ' + bot.prefix + 'help'
+  name: '/help | ' + bot.prefix + 'help + | %servers% servers'
 }
 let status = bot.indev === true ? devStatus : publicStatus;
 

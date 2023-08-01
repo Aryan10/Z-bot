@@ -50,14 +50,14 @@ const learnParser = (string) => {
 
 const embedColours = {
     Red: 16724530,
-    Blue: 2456831,
+    Blue: 2456831
 }
 
 const pokedex = require('/app/data/pokedex.js');
 const { Moves } = require('/app/data/moves.js');
 const { Items } = require('/app/data/items.js');
 const learnsets = require('/app/data/learnsets.js');
-const sprites = require('/app/util/spriteLoader.js').pokemon;
+const sprites = require('/app/util/dex/spriteLoader.js').pokemon;
 const { pokeParser } = require('/app/commands/pokedex.js');
 
 exports.slash = {
@@ -185,7 +185,7 @@ exports.help = {
   name: "learn",
   shortDesc: "Show pokemon's full learnset or check a particular move's compatability.",
   desc: "Displays all of specified pokemon's learnable moves if used without a specified move. If a move is specified, lists the various methods the pokemon can learn that move.",
-  usage: "learn <pokemon name> , [move name]",
+  usage: ["learn <pokemon name> , [move name]", "learn <pokemon name>"],
   example: [ "learn charizard" , "learn pikachu, fake out" ]
 }
 

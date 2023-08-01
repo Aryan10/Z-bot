@@ -62,13 +62,13 @@ exports.conf = {
   disabled: false,
   ownerOnly: false,
   guildOnly: false,
-  aliases: ['abil'],
+  aliases: ['abil', 'abilities'],
 }
 
 exports.help = {
   name: "ability",
   shortDesc: "Display ability information.",
-  desc: "Displays various information about the specified ability, such as effect and rating.",
-  usage: "ability <ability name>",
+  desc: "Displays various information about the specified ability, such as effect and rating. Accepts ability id number argument.",
+  usage: ["ability <ability name>"],
   example: ['ability lightning rod'],
 }

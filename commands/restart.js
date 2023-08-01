@@ -32,6 +32,6 @@ exports.help = {
   name: "restart",
   shortDesc: "Restarts process.",
   desc: "",
-  usage: "",
+  usage: [" "],
   example: []
 }

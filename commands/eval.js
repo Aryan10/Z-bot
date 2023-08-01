@@ -6,7 +6,7 @@ const clean = text => {
 }
 
 exports.run = (client, message) => {
-  let code = message.args.join(" ");
+  let code = message.args.join(" ").replace(/`/g, '');
   if (!code) return;
 
   try {
@@ -24,6 +24,7 @@ exports.run = (client, message) => {
       .setAuthor("EVAL CODE", client.user.defaultAvatarURL)
       .addField("Eval Input", "```" + code + "```")
       .addField("Eval Error", "```" + clean(err) + "```");
+    console.log(err);
     message.reply({embed: errEmbed});
   }
 }
@@ -40,6 +41,6 @@ exports.help = {
   name: "eval",
   shortDesc: "Evals code.",
   desc: "",
-  usage: "eval <code>",
+  usage: ["eval <code>"],
   example: [],
 }

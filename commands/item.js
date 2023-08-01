@@ -9,27 +9,7 @@ Object.keys(Items).forEach(name => {
 });
 let numArray = Object.keys(numObj);
 
-const embedColours = {
-    Fire: 16724530,
-    Water: 2456831,
-    Ice: 2456831,
-    Flying: 2456831,
-    Dragon: 2456831,
-    Electric: 16773977,
-    Grass: 4128590,
-    Bug: 4128590,
-    Dark: 3289650,
-    Rock: 10702874,
-    Ground: 10702874,
-    Fighting: 10702874,
-    Poison: 10894824,
-    Ghost: 9868950,
-    Steel: 9868950,
-    Normal: 14803425,
-    'undefined': 14803425,
-    Psychic: 16737701,
-    Fairy: 16737701
-}
+const embedColours = require('/app/util/embedColors.js').typeColors;
 
 exports.slash = {
   disabled: false,
@@ -115,13 +95,13 @@ exports.conf = {
   disabled: false,
   ownerOnly: false,
   guildOnly: false,
-  aliases: [],
+  aliases: ['items'],
 }
 
 exports.help = {
   name: "item",
   shortDesc: "Displays hold item information.",
-  desc: "Displays various information about the specified hold item, such as image, item usage and effect.",
-  usage: "item <item name>",
+  desc: "Displays various information about the specified hold item, such as image, item usage and effect. Accepts item id number argument.",
+  usage: ["item <item name>"],
   example: ['item pokeball', 'item choice scarf'],
 }
